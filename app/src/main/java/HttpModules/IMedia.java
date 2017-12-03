@@ -15,7 +15,7 @@ import retrofit.mime.TypedFile;
 public interface IMedia {
 
     @Multipart
-    @POST("/api/values/Media")
+    @POST("/api/values")
     void MediaUpload(@PartMap Map<String,TypedFile> media, Callback<String> response);
 }
 

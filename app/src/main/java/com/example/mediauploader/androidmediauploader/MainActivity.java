@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
                 media.MediaUpload(mediaList, new Callback<String>() {
                     @Override
                     public void success(String s, Response response) {
-                        Toast.makeText(getApplicationContext(), response.toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
                     }
 
                     @Override
