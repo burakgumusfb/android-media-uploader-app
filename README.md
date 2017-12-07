@@ -2,7 +2,11 @@
 
 1) You must create like below link api.
 
-        https://github.com/burakgumusfb/Android.Media.Uploader/wiki
+        https://github.com/burakgumusfb/Android.Media.Uploader/wiki/File-Upload
+        
+        OR
+        
+        https://github.com/burakgumusfb/Android.Media.Uploader/wiki/Binary-Upload
         
 2)  You must define Web Api IP address
     Common -> Constants - > REST_BASE_SERVICE = "http://192.168.1.190/";
