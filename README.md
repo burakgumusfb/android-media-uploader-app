@@ -20,6 +20,9 @@
          @Multipart
          @POST("/api/values")
          void MediaUpload(@PartMap Map<String,TypedFile> media, Callback<String> response);
+         
+         @POST("/api/valuestwo")
+         void MediaUploadByte(@Body FileData fileData, Callback<String> response);
         }
 
 4) And run.
