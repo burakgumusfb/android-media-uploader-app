@@ -22,5 +22,10 @@
             android:id="@+id/btnUpload"
             android:layout_width="125dp"
             android:layout_height="50dp" />
+        <Button
+            android:text="UploadByteArray"
+            android:id="@+id/btnUploadByteArray"
+            android:layout_width="125dp"
+            android:layout_height="50dp" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

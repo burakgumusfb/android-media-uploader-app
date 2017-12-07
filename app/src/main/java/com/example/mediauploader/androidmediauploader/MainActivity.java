@@ -1,25 +1,14 @@
 package com.example.mediauploader.androidmediauploader;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
-import android.content.ContentUris;
-import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
-import android.os.Environment;
-import android.provider.DocumentsContract;
-import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -30,6 +19,7 @@ import java.util.Map;
 import Common.Constants;
 import Helper.Helper;
 import HttpModules.IMedia;
+import Model.FileData;
 import retrofit.Callback;
 import retrofit.RestAdapter;
 import retrofit.RetrofitError;
@@ -41,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     int IMAGE_PICKER_SELECT = 0;
     private Button btnChoose;
     private Button btnUpload;
+    private Button btnUploadByteArray;
 
 
     @Override
@@ -58,10 +49,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                 Intent mediaIntent = new Intent(
-                         Intent.ACTION_GET_CONTENT
+                        Intent.ACTION_GET_CONTENT
                         //,Uri.parse(Environment.DIRECTORY_DCIM)
                 );
-               // mediaIntent.setType("*/*");
+                // mediaIntent.setType("*/*");
                 mediaIntent.setType("image/*, video/*");
                 mediaIntent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "video/*"});
                 mediaIntent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
@@ -97,13 +88,39 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        btnUploadByteArray = (Button) findViewById(R.id.btnUploadByteArray);
+        btnUploadByteArray.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FileData fileData = new FileData();
+
+                for (String path : MediasPaths) {
+                   String binaryData = Helper.getBinaryFromFile(path);
+                   fileData.Files.add(binaryData);
+                }
+
+                IMedia media = restAdapter.create(IMedia.class);
+                media.MediaUploadByte(fileData, new Callback<String>() {
+                    @Override
+                    public void success(String s, Response response) {
+                        Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void failure(RetrofitError error) {
+                        Toast.makeText(getApplicationContext(), error.toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            }
+        });
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
         if (resultCode == RESULT_OK) {
             MediasPaths = null;
-            MediasPaths = Helper.GetAllPath(getApplicationContext(),data);
+            MediasPaths = Helper.GetAllPath(getApplicationContext(), data);
         }
     }
 
@@ -125,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                //SomeThing();
+            //SomeThing();
         }
     }
 
